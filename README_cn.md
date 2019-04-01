@@ -4,6 +4,9 @@
 可自定义动效的卡片切换视图
 
 ## 截图
+| Android | iOS |
+| :------: | :------: |
+| ![](https://raw.githubusercontent.com/BakerJQ/Flutter-InfiniteCards/master/screenshot/android.gif) | ![](https://raw.githubusercontent.com/BakerJQ/Flutter-InfiniteCards/master/screenshot/ios.gif) |
 
 ## 示例运行
 ```
