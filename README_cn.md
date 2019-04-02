@@ -16,32 +16,32 @@ flutter run
 ```
 
 ## 如何使用
-### 构建Widget
+
+### 构建Controller
 ```dart
-import 'package:infinite_cards/infinite_cards.dart';
-
-InfiniteCardsController _controller = InfiniteCardsController();
-AnimType _animType = AnimType.SWITCH;
-
-Widget _renderItem(BuildContext context, int index) {
-    return Image(
-      image: AssetImage('assets/pic${index + 1}.png'),
+@override
+  void initState() {
+    super.initState();
+    _controller = InfiniteCardsController(
+      itemBuilder: _renderItem,
+      itemCount: 5,
+      animType: AnimType.SWITCH,
     );
   }
+```
 
+### 构建Widget
+```dart
 InfiniteCards(
-            itemBuilder: _renderItem,
-            itemCount: 5,
-            controller: _controller,
-            animType: _animType,
-          )
+  controller: _controller,
+)
 ```
 
 ### 调用Controller方法
 ```dart
   _controller.previous();
   _controller.next();
-  _controller.reset();
+  _controller.reset(...);
 ```
 
 ### 自定义动效
@@ -54,6 +54,7 @@ InfiniteCards(
             ...
             transformToFront: yourCustomTransformToFront,
             transformToBack: yourCustomTransformToBack,
+            curve: yourCustomCurve
             ...
           )
 ```

@@ -1,30 +1,17 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/widgets.dart';
 
-import 'anim_transform.dart';
 import 'card_item.dart';
 import 'infinite_card_view.dart';
+import 'infinite_cards_controller.dart';
 
 const int ANIM_DURATION = 1000,
     ANIM_ADD_REMOVE_DELAY = 200,
     ANIM_ADD_REMOVE_DURATION = 500;
 
 class AnimHelper {
-  final AnimTransform transformToFront,
-      transformToBack,
-      transformCommon,
-      transformAdd,
-      transformRemove;
-  final ZIndexTransform zIndexTransformCommon,
-      zIndexTransformToFront,
-      zIndexTransformToBack;
-  final int itemCount;
-  final IndexedWidgetBuilder itemBuilder;
-  final Duration animDuration;
-  final bool clickItemToSwitch;
+  final InfiniteCardsController controller;
   final VoidCallback listenerForSetState;
-  final AnimInterpolator interpolator;
-  AnimType animType;
 
   AnimationController _animationController;
   Animation<double> _animation;
@@ -35,23 +22,7 @@ class AnimHelper {
   int _positionToBack, _positionToFront;
   bool _isAddRemoveAnim = false, _isSwitchAnim = false, _isAddAnim = true;
 
-  AnimHelper({
-    @required this.transformToFront,
-    @required this.transformToBack,
-    @required this.transformCommon,
-    @required this.transformAdd,
-    @required this.transformRemove,
-    @required this.zIndexTransformCommon,
-    @required this.zIndexTransformToFront,
-    @required this.zIndexTransformToBack,
-    @required this.itemCount,
-    @required this.itemBuilder,
-    this.animDuration,
-    this.clickItemToSwitch = true,
-    @required this.listenerForSetState,
-    this.animType = AnimType.TO_FRONT,
-    this.interpolator = DefaultInterpolator,
-  });
+  AnimHelper({@required this.controller, @required this.listenerForSetState});
 
   void init(TickerProvider tickerProvider, BuildContext context) {
     _initAnimation(tickerProvider);
@@ -62,18 +33,18 @@ class AnimHelper {
     if (isAnim()) {
       return;
     }
-    if (animType == AnimType.TO_END) {
-      animType = AnimType.TO_FRONT;
+    if (controller.animType == AnimType.TO_END) {
+      controller.animType = AnimType.TO_FRONT;
     }
-    _cardAnim(itemCount - 1, _cardList[itemCount - 1]);
+    _cardAnim(controller.itemCount - 1, _cardList[controller.itemCount - 1]);
   }
 
   void next() {
     if (isAnim()) {
       return;
     }
-    if (animType != AnimType.TO_END) {
-      animType = AnimType.TO_END;
+    if (controller.animType != AnimType.TO_END) {
+      controller.animType = AnimType.TO_END;
     }
     _cardAnim(0, _cardList[0]);
   }
@@ -82,8 +53,8 @@ class AnimHelper {
     if (isAnim()) {
       return;
     }
-    if (animType == AnimType.TO_END) {
-      animType = AnimType.TO_FRONT;
+    if (controller.animType == AnimType.TO_END) {
+      controller.animType = AnimType.TO_FRONT;
     }
     _cardAnim(index, _cardList[index]);
   }
@@ -97,8 +68,8 @@ class AnimHelper {
 
   void _initCards(BuildContext context) {
     _cardList = List();
-    for (int i = 0; i < itemCount; i++) {
-      Widget item = itemBuilder(context, i);
+    for (int i = 0; i < controller.itemCount; i++) {
+      Widget item = controller.itemBuilder(context, i);
       item = _wrapItem(item, i);
       _cardList.add(CardItem(0, i, item));
     }
@@ -108,7 +79,8 @@ class AnimHelper {
   void _initAnimation(TickerProvider tickerProvider) {
     _animationController = AnimationController(
         vsync: tickerProvider,
-        duration: animDuration ?? const Duration(milliseconds: ANIM_DURATION));
+        duration: controller.animDuration ??
+            const Duration(milliseconds: ANIM_DURATION));
     _animation = new Tween(begin: 0.0, end: 1.0).animate(_animationController);
     _animation.addListener(listenerForSetState);
     _animation.addStatusListener((status) {
@@ -124,7 +96,7 @@ class AnimHelper {
   }
 
   void _initAddRemoveAnimation(TickerProvider tickerProvider) {
-    for (int i = 0; i < itemCount; i++) {
+    for (int i = 0; i < controller.itemCount; i++) {
       AnimationController animationController = AnimationController(
           vsync: tickerProvider,
           duration: const Duration(milliseconds: ANIM_ADD_REMOVE_DURATION));
@@ -137,7 +109,7 @@ class AnimHelper {
           _isAddRemoveAnim = true;
         }
       });
-      if (i == itemCount - 1) {
+      if (i == controller.itemCount - 1) {
         animation.addStatusListener((status) {
           if (status == AnimationStatus.completed) {
             _isAddRemoveAnim = false;
@@ -163,7 +135,7 @@ class AnimHelper {
   void _addRemoveAnim() {
     _isAddRemoveAnim = true;
     _isSwitchAnim = false;
-    for (int i = 0; i < itemCount; i++) {
+    for (int i = 0; i < controller.itemCount; i++) {
       Future.delayed(Duration(milliseconds: ANIM_ADD_REMOVE_DELAY * i), () {
         _animationControllerAddRemoveList[i].forward(from: 0.0);
       });
@@ -174,7 +146,8 @@ class AnimHelper {
     Widget card = Center(
       child: item,
     );
-    if (clickItemToSwitch && animType != AnimType.TO_END) {
+    if (controller.clickItemToSwitch &&
+        controller.animType != AnimType.TO_END) {
       return GestureDetector(
         onTap: () {
           _onItemTap(index);
@@ -186,10 +159,10 @@ class AnimHelper {
   }
 
   void _onItemTap(int index) {
-    if (animType == AnimType.TO_END) {
+    if (controller.animType == AnimType.TO_END) {
       return;
     }
-    for (int i = 0; i < itemCount; i++) {
+    for (int i = 0; i < controller.itemCount; i++) {
       CardItem card = _cardList[i];
       if (card.adapterIndex == index) {
         if (i != 0) {
@@ -204,7 +177,7 @@ class AnimHelper {
     if (isAnim()) {
       return;
     }
-    switch (animType) {
+    switch (controller.animType) {
       case AnimType.SWITCH:
         _cardToFront = card;
         _cardToBack = _cardList[0];
@@ -219,7 +192,7 @@ class AnimHelper {
         break;
       case AnimType.TO_END:
         _cardToFront = null;
-        _positionToFront = itemCount - 1;
+        _positionToFront = controller.itemCount - 1;
         _cardToBack = card;
         _positionToBack = index;
         break;
@@ -228,7 +201,7 @@ class AnimHelper {
   }
 
   void _animEnd() {
-    switch (animType) {
+    switch (controller.animType) {
       case AnimType.SWITCH:
         _cardList.removeAt(_positionToFront);
         _cardList.removeAt(0);
@@ -264,7 +237,7 @@ class AnimHelper {
   }
 
   List<Widget> getCardList(double width, double height) {
-    for (int i = 0; i < itemCount; i++) {
+    for (int i = 0; i < controller.itemCount; i++) {
       if (_isAddRemoveAnim) {
         if (_isAddAnim) {
           _addTransform(i, width, height);
@@ -289,7 +262,7 @@ class AnimHelper {
   void _addTransform(int position, double width, double height) {
     CardItem cardItem = _cardList[position];
     Animation animation = _animationAddRemoveList[position];
-    zIndexTransformCommon(
+    controller.zIndexTransformCommon(
         _cardList[position],
         animation.value,
         _getInterpolatorValue(animation.value),
@@ -297,7 +270,7 @@ class AnimHelper {
         height,
         position + 1,
         position);
-    cardItem.transformWidget = transformAdd(
+    cardItem.transformWidget = controller.transformAdd(
         cardItem.widget,
         animation.value,
         _getInterpolatorValue(animation.value),
@@ -310,7 +283,7 @@ class AnimHelper {
   void _removeTransform(int position, double width, double height) {
     CardItem cardItem = _cardList[position];
     Animation animation = _animationAddRemoveList[position];
-    zIndexTransformCommon(
+    controller.zIndexTransformCommon(
         _cardList[position],
         animation.value,
         _getInterpolatorValue(animation.value),
@@ -318,7 +291,7 @@ class AnimHelper {
         height,
         position,
         position);
-    cardItem.transformWidget = transformRemove(
+    cardItem.transformWidget = controller.transformRemove(
         cardItem.widget,
         animation.value,
         _getInterpolatorValue(animation.value),
@@ -331,7 +304,7 @@ class AnimHelper {
   void _commonTransform(
       double width, double height, int fromPosition, int toPosition) {
     CardItem cardItem = _cardList[fromPosition];
-    zIndexTransformCommon(
+    controller.zIndexTransformCommon(
         cardItem,
         _animation.value,
         _getInterpolatorValue(_animation.value),
@@ -339,7 +312,7 @@ class AnimHelper {
         height,
         fromPosition,
         toPosition);
-    cardItem.transformWidget = transformCommon(
+    cardItem.transformWidget = controller.transformCommon(
         cardItem.widget,
         _animation.value,
         _getInterpolatorValue(_animation.value),
@@ -358,7 +331,7 @@ class AnimHelper {
       _toFrontTransform(width, height, position, _positionToBack);
       return;
     }
-    switch (animType) {
+    switch (controller.animType) {
       case AnimType.SWITCH:
         break;
       case AnimType.TO_FRONT:
@@ -377,7 +350,7 @@ class AnimHelper {
   void _toFrontTransform(
       double width, double height, int fromPosition, int toPosition) {
     CardItem cardItem = _cardList[fromPosition];
-    zIndexTransformToFront(
+    controller.zIndexTransformToFront(
         cardItem,
         _animation.value,
         _getInterpolatorValue(_animation.value),
@@ -385,7 +358,7 @@ class AnimHelper {
         height,
         fromPosition,
         toPosition);
-    cardItem.transformWidget = transformToFront(
+    cardItem.transformWidget = controller.transformToFront(
         cardItem.widget,
         _animation.value,
         _getInterpolatorValue(_animation.value),
@@ -398,7 +371,7 @@ class AnimHelper {
   void _toBackTransform(
       double width, double height, int fromPosition, int toPosition) {
     CardItem cardItem = _cardList[fromPosition];
-    zIndexTransformToBack(
+    controller.zIndexTransformToBack(
         cardItem,
         _animation.value,
         _getInterpolatorValue(_animation.value),
@@ -406,7 +379,7 @@ class AnimHelper {
         height,
         fromPosition,
         toPosition);
-    cardItem.transformWidget = transformToBack(
+    cardItem.transformWidget = controller.transformToBack(
         cardItem.widget,
         _animation.value,
         _getInterpolatorValue(_animation.value),
@@ -417,6 +390,8 @@ class AnimHelper {
   }
 
   double _getInterpolatorValue(double fraction) {
-    return interpolator == null ? fraction : interpolator(fraction);
+    return controller.curve == null
+        ? fraction
+        : controller.curve.transform(fraction);
   }
 }

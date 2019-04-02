@@ -22,8 +22,6 @@ typedef ZIndexTransform = void Function(
     int fromPosition,
     int toPosition);
 
-typedef AnimInterpolator = double Function(double value);
-
 const AnimTransform DefaultCommonTransform = _defaultCommonTransform,
     DefaultAddTransform = _defaultAddTransform,
     DefaultRemoveTransform = _defaultRemoveTransform,
@@ -34,7 +32,7 @@ const ZIndexTransform DefaultCommonZIndexTransform =
         _defaultCommonZIndexTransform,
     DefaultToFrontZIndexTransform = _defaultToFrontZIndexTransform;
 
-const AnimInterpolator DefaultInterpolator = _defaultInterpolator;
+const Curve DefaultCurve = _DefaultCurve();
 
 Transform _defaultCommonTransform(
     Widget item,
@@ -126,8 +124,7 @@ Transform _defaultToBackTransform(
   double interpolatorScale =
       0.8 - 0.1 * fromPosition + (0.1 * interpolatorFraction * -2);
   double translationY = -cardHeight * (0.8 - interpolatorScale) * 0.5 -
-      cardWidth *
-          (0.02 * fromPosition - 0.02 * interpolatorFraction * -2);
+      cardWidth * (0.02 * fromPosition - 0.02 * interpolatorFraction * -2);
   return Transform.translate(
     offset: Offset(0, translationY),
     child: Transform.scale(
@@ -206,7 +203,12 @@ void _defaultToFrontZIndexTransform(
   }
 }
 
-double _defaultInterpolator(double t) {
-  t -= 1.0;
-  return t * t * ((-18 + 1) * t + -18);
+class _DefaultCurve extends Curve {
+  const _DefaultCurve();
+
+  @override
+  double transform(double t) {
+    t -= 1.0;
+    return t * t * ((-18 + 1) * t + -18);
+  }
 }

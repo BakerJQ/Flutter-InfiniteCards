@@ -7,8 +7,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  InfiniteCardsController _controller = InfiniteCardsController();
-  AnimType _animType = AnimType.SWITCH;
+  InfiniteCardsController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = InfiniteCardsController(
+      itemBuilder: _renderItem,
+      itemCount: 5,
+      animType: AnimType.SWITCH,
+    );
+  }
 
   Widget _renderItem(BuildContext context, int index) {
     return Image(
@@ -27,10 +36,7 @@ class _HomeState extends State<Home> {
           InfiniteCards(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width * 1.3,
-            itemBuilder: _renderItem,
-            itemCount: 5,
             controller: _controller,
-            animType: _animType,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -43,7 +49,7 @@ class _HomeState extends State<Home> {
               ),
               RaisedButton(
                 onPressed: () {
-                  _controller.reset();
+                  _controller.reset(forceReset: true);
                 },
                 child: Text("Reset"),
               ),
