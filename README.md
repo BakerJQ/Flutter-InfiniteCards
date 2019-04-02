@@ -4,6 +4,9 @@
 An infinite card switching UI for Flutter, support custom animation
 可自定义动效的卡片切换视图（[中文文档](https://github.com/BakerJQ/Flutter-InfiniteCards/blob/master/README_cn.md)）
 
+## Android version
+https://github.com/BakerJQ/Android-InfiniteCards
+
 ## Screenshot
 | Android | iOS |
 | :------: | :------: |
