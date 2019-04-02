@@ -9,46 +9,67 @@ const int ANIM_DURATION = 1000,
     ANIM_ADD_REMOVE_DELAY = 200,
     ANIM_ADD_REMOVE_DURATION = 500;
 
+enum AnimStatus { CardStart, CardEnd, AddStart, AddEnd, RemoveStart, RemoveEnd }
+
+typedef AnimCallback = void Function(AnimStatus status);
+
 class AnimHelper {
   final InfiniteCardsController controller;
   final VoidCallback listenerForSetState;
 
+  //animations for switch
   AnimationController _animationController;
   Animation<double> _animation;
+  //animations for add and remove
   List<AnimationController> _animationControllerAddRemoveList = new List();
   List<Animation<double>> _animationAddRemoveList = new List();
+  //items
   List<CardItem> _cardList = new List();
+  //item moves to back, item moves to front
   CardItem _cardToBack, _cardToFront;
+  //the position of item moves to back, the position of item moves to front
   int _positionToBack, _positionToFront;
+  //is add remove anim running, is switch anim running
   bool _isAddRemoveAnim = false, _isSwitchAnim = false, _isAddAnim = true;
+
+  AnimCallback animCallback;
+  TickerProvider _tickerProvider;
+  BuildContext _context;
 
   AnimHelper({@required this.controller, @required this.listenerForSetState});
 
   void init(TickerProvider tickerProvider, BuildContext context) {
-    _initAnimation(tickerProvider);
-    _initCards(context);
+    _tickerProvider = tickerProvider;
+    _context = context;
+    _initAnimation();
+    _initCards();
   }
 
+  //switch to previous card
   void previous() {
     if (isAnim()) {
       return;
     }
+    //not support for TO_END type
     if (controller.animType == AnimType.TO_END) {
       controller.animType = AnimType.TO_FRONT;
     }
     _cardAnim(controller.itemCount - 1, _cardList[controller.itemCount - 1]);
   }
 
+  //switch to next card
   void next() {
     if (isAnim()) {
       return;
     }
+    //only support for TO_END type
     if (controller.animType != AnimType.TO_END) {
       controller.animType = AnimType.TO_END;
     }
     _cardAnim(0, _cardList[0]);
   }
 
+  //select specific index card
   void anim(int index) {
     if (isAnim()) {
       return;
@@ -59,6 +80,7 @@ class AnimHelper {
     _cardAnim(index, _cardList[index]);
   }
 
+  //reset cards
   void reset() {
     if (isAnim()) {
       return;
@@ -66,19 +88,32 @@ class AnimHelper {
     _removeCards();
   }
 
-  void _initCards(BuildContext context) {
-    _cardList = List();
-    for (int i = 0; i < controller.itemCount; i++) {
-      Widget item = controller.itemBuilder(context, i);
-      item = _wrapItem(item, i);
-      _cardList.add(CardItem(0, i, item));
-    }
+  //reset card widgets
+  void resetWidgets(){
+    _initAddRemoveAnimation();
+    _initWidgets();
+  }
+
+  //init cards
+  void _initCards() {
+    _initWidgets();
     _addCards();
   }
 
-  void _initAnimation(TickerProvider tickerProvider) {
+  //init widgets
+  void _initWidgets() {
+    _cardList = List();
+    for (int i = 0; i < controller.itemCount; i++) {
+      Widget item = controller.itemBuilder(_context, i);
+      item = _wrapItem(item, i);
+      _cardList.add(CardItem(0, i, item));
+    }
+  }
+
+  //init animation
+  void _initAnimation() {
     _animationController = AnimationController(
-        vsync: tickerProvider,
+        vsync: _tickerProvider,
         duration: controller.animDuration ??
             const Duration(milliseconds: ANIM_DURATION));
     _animation = new Tween(begin: 0.0, end: 1.0).animate(_animationController);
@@ -92,13 +127,16 @@ class AnimHelper {
         _isSwitchAnim = false;
       }
     });
-    _initAddRemoveAnimation(tickerProvider);
+    _initAddRemoveAnimation();
   }
 
-  void _initAddRemoveAnimation(TickerProvider tickerProvider) {
+  //init add remove animation
+  void _initAddRemoveAnimation() {
+    _animationControllerAddRemoveList = new List();
+    _animationAddRemoveList = new List();
     for (int i = 0; i < controller.itemCount; i++) {
       AnimationController animationController = AnimationController(
-          vsync: tickerProvider,
+          vsync: _tickerProvider,
           duration: const Duration(milliseconds: ANIM_ADD_REMOVE_DURATION));
       Animation<double> animation =
           new Tween(begin: 0.0, end: 1.0).animate(animationController);
@@ -122,16 +160,25 @@ class AnimHelper {
     }
   }
 
+  //add cards
   void _addCards() {
     _isAddAnim = true;
+    if (animCallback != null) {
+      animCallback(AnimStatus.AddStart);
+    }
     _addRemoveAnim();
   }
 
+  //remove cards
   void _removeCards() {
     _isAddAnim = false;
+    if (animCallback != null) {
+      animCallback(AnimStatus.RemoveStart);
+    }
     _addRemoveAnim();
   }
 
+  //add remove animation
   void _addRemoveAnim() {
     _isAddRemoveAnim = true;
     _isSwitchAnim = false;
@@ -177,6 +224,9 @@ class AnimHelper {
     if (isAnim()) {
       return;
     }
+    if (animCallback != null) {
+      animCallback(AnimStatus.CardStart);
+    }
     switch (controller.animType) {
       case AnimType.SWITCH:
         _cardToFront = card;
@@ -217,11 +267,17 @@ class AnimHelper {
         _cardList.add(_cardToBack);
         break;
     }
+    if (animCallback != null) {
+      animCallback(AnimStatus.CardEnd);
+    }
   }
 
   void _addRemoveAnimEnd() {
     for (AnimationController controller in _animationControllerAddRemoveList) {
       controller.reset();
+    }
+    if (animCallback != null) {
+      animCallback(_isAddAnim ? AnimStatus.AddEnd : AnimStatus.RemoveEnd);
     }
     if (!_isAddAnim) {
       _cardList.sort((card1, card2) {

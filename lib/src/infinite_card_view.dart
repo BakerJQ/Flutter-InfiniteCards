@@ -30,6 +30,7 @@ class _InfiniteCardsState extends State<InfiniteCards>
   @override
   void initState() {
     super.initState();
+    //init background, helper, controller
     _background = widget.background ?? Color(0xffffffff);
     _helper = AnimHelper(
         controller: widget.controller,

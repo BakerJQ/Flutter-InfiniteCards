@@ -122,9 +122,9 @@ Transform _defaultToBackTransform(
     rotateX = -math.pi * (1 - fraction);
   }
   double interpolatorScale =
-      0.8 - 0.1 * fromPosition + (0.1 * interpolatorFraction * -2);
+      0.8 - 0.1 * fromPosition + (0.1 * interpolatorFraction * positionCount);
   double translationY = -cardHeight * (0.8 - interpolatorScale) * 0.5 -
-      cardWidth * (0.02 * fromPosition - 0.02 * interpolatorFraction * -2);
+      cardHeight * (0.02 * fromPosition - 0.02 * interpolatorFraction * positionCount);
   return Transform.translate(
     offset: Offset(0, translationY),
     child: Transform.scale(
@@ -209,6 +209,6 @@ class _DefaultCurve extends Curve {
   @override
   double transform(double t) {
     t -= 1.0;
-    return t * t * ((-18 + 1) * t + -18);
+    return t * t * ((-18 + 1) * t + -18) + 1.0;
   }
 }
