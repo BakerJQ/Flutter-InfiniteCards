@@ -7,7 +7,7 @@ import 'card_item.dart';
 typedef AnimTransform = Transform Function(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -16,7 +16,7 @@ typedef AnimTransform = Transform Function(
 typedef ZIndexTransform = void Function(
     CardItem card,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardWidth,
     double cardHeight,
     int fromPosition,
@@ -37,7 +37,7 @@ const Curve DefaultCurve = _DefaultCurve();
 Transform _defaultCommonTransform(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -58,7 +58,7 @@ Transform _defaultCommonTransform(
 Transform _defaultAddTransform(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -83,7 +83,7 @@ Transform _defaultAddTransform(
 Transform _defaultRemoveTransform(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -108,7 +108,7 @@ Transform _defaultRemoveTransform(
 Transform _defaultToBackTransform(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -122,9 +122,9 @@ Transform _defaultToBackTransform(
     rotateX = -math.pi * (1 - fraction);
   }
   double interpolatorScale =
-      0.8 - 0.1 * fromPosition + (0.1 * interpolatorFraction * positionCount);
+      0.8 - 0.1 * fromPosition + (0.1 * curveFraction * positionCount);
   double translationY = -cardHeight * (0.8 - interpolatorScale) * 0.5 -
-      cardHeight * (0.02 * fromPosition - 0.02 * interpolatorFraction * positionCount);
+      cardHeight * (0.02 * fromPosition - 0.02 * curveFraction * positionCount);
   return Transform.translate(
     offset: Offset(0, translationY),
     child: Transform.scale(
@@ -143,7 +143,7 @@ Transform _defaultToBackTransform(
 Transform _defaultToFrontTransform(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -179,7 +179,7 @@ Transform _defaultToFrontTransform(
 void _defaultCommonZIndexTransform(
     CardItem card,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardWidth,
     double cardHeight,
     int fromPosition,
@@ -191,7 +191,7 @@ void _defaultCommonZIndexTransform(
 void _defaultToFrontZIndexTransform(
     CardItem card,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardWidth,
     double cardHeight,
     int fromPosition,

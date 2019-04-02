@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
 Transform _customToBackTransform(
     Widget item,
     double fraction,
-    double interpolatorFraction,
+    double curveFraction,
     double cardHeight,
     double cardWidth,
     int fromPosition,
@@ -111,10 +111,10 @@ Transform _customToBackTransform(
     rotateY = math.pi / 2 * (1 - fraction);
   }
   double interpolatorScale =
-      0.8 - 0.1 * fromPosition + (0.1 * interpolatorFraction * positionCount);
+      0.8 - 0.1 * fromPosition + (0.1 * curveFraction * positionCount);
   double translationY = -cardHeight * (0.8 - interpolatorScale) * 0.5 -
       cardHeight *
-          (0.02 * fromPosition - 0.02 * interpolatorFraction * positionCount);
+          (0.02 * fromPosition - 0.02 * curveFraction * positionCount);
   return Transform.translate(
     offset: Offset(translationX, translationY),
     child: Transform.scale(
