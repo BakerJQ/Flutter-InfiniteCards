@@ -3,6 +3,8 @@
 
 可自定义动效的卡片切换视图
 
+实现思路：https://juejin.im/post/5ca375f3e51d451a18362e2a
+
 ## Android版本
 https://github.com/BakerJQ/Android-InfiniteCards
 
