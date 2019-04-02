@@ -1,6 +1,6 @@
 name: infinite_cards
 description: An infinite card switching UI for Flutter, support custom animation
-version: 1.0.0
+version: 1.0.1
 author: BakerJ <305317218@qq.com>
 homepage: https://github.com/BakerJQ/Flutter-InfiniteCards
 

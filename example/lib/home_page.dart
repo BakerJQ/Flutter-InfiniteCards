@@ -1,6 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:infinite_cards/infinite_cards.dart';
-import 'dart:math' as math;
 
 class Home extends StatefulWidget {
   @override
@@ -62,6 +63,9 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               RaisedButton(
                 onPressed: () {
+                  _controller.reset(
+                      animType:
+                          _isTypeSwitch ? AnimType.SWITCH : AnimType.TO_FRONT);
                   _controller.previous();
                 },
                 child: Text("Pre"),
@@ -74,6 +78,7 @@ class _HomeState extends State<Home> {
               ),
               RaisedButton(
                 onPressed: () {
+                  _controller.reset(animType: AnimType.TO_END);
                   _controller.next();
                 },
                 child: Text("Next"),
@@ -108,7 +113,8 @@ Transform _customToBackTransform(
   double interpolatorScale =
       0.8 - 0.1 * fromPosition + (0.1 * interpolatorFraction * positionCount);
   double translationY = -cardHeight * (0.8 - interpolatorScale) * 0.5 -
-      cardHeight * (0.02 * fromPosition - 0.02 * interpolatorFraction * positionCount);
+      cardHeight *
+          (0.02 * fromPosition - 0.02 * interpolatorFraction * positionCount);
   return Transform.translate(
     offset: Offset(translationX, translationY),
     child: Transform.scale(

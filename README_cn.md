@@ -23,7 +23,7 @@ flutter run
 ### 添加依赖
 ```yaml
 dependencies:
-  infinite_cards: ^1.0.0
+  infinite_cards: ^1.0.1
 ```
 
 ### 构建Controller

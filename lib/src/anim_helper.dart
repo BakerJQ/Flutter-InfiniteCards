@@ -57,7 +57,7 @@ class AnimHelper {
     }
     //not support for TO_END type
     if (controller.animType == AnimType.TO_END) {
-      controller.animType = AnimType.TO_FRONT;
+      return;
     }
     _cardAnim(controller.itemCount - 1, _cardList[controller.itemCount - 1]);
   }
@@ -69,7 +69,7 @@ class AnimHelper {
     }
     //only support for TO_END type
     if (controller.animType != AnimType.TO_END) {
-      controller.animType = AnimType.TO_END;
+      return;
     }
     _cardAnim(0, _cardList[0]);
   }
@@ -80,7 +80,7 @@ class AnimHelper {
       return;
     }
     if (controller.animType == AnimType.TO_END) {
-      controller.animType = AnimType.TO_FRONT;
+      return;
     }
     _cardAnim(index, _cardList[index]);
   }
@@ -318,15 +318,18 @@ class AnimHelper {
   // get card widgets
   List<Widget> getCardList(double width, double height) {
     for (int i = 0; i < controller.itemCount; i++) {
-      if (_isAddRemoveAnim) {//perform add remove anim
+      if (_isAddRemoveAnim) {
+        //perform add remove anim
         if (_isAddAnim) {
           _addTransform(i, width, height);
         } else {
           _removeTransform(i, width, height);
         }
-      } else if (_isSwitchAnim) {//perform switch anim
+      } else if (_isSwitchAnim) {
+        //perform switch anim
         _switchTransform(width, height, i);
-      } else {//perform common anim
+      } else {
+        //perform common anim
         _commonTransform(width, height, i, i);
       }
     }
@@ -344,14 +347,8 @@ class AnimHelper {
   void _addTransform(int position, double width, double height) {
     CardItem cardItem = _cardList[position];
     Animation animation = _animationAddRemoveList[position];
-    controller.zIndexTransformCommon(
-        _cardList[position],
-        animation.value,
-        _getCurveValue(animation.value),
-        width,
-        height,
-        position + 1,
-        position);
+    controller.zIndexTransformCommon(_cardList[position], animation.value,
+        _getCurveValue(animation.value), width, height, position + 1, position);
     cardItem.transformWidget = controller.transformAdd(
         cardItem.widget,
         animation.value,
@@ -366,14 +363,8 @@ class AnimHelper {
   void _removeTransform(int position, double width, double height) {
     CardItem cardItem = _cardList[position];
     Animation animation = _animationAddRemoveList[position];
-    controller.zIndexTransformCommon(
-        _cardList[position],
-        animation.value,
-        _getCurveValue(animation.value),
-        width,
-        height,
-        position,
-        position);
+    controller.zIndexTransformCommon(_cardList[position], animation.value,
+        _getCurveValue(animation.value), width, height, position, position);
     cardItem.transformWidget = controller.transformRemove(
         cardItem.widget,
         animation.value,

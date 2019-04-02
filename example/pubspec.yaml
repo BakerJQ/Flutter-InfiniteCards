@@ -17,7 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  infinite_cards: ^1.0.0
+  infinite_cards: ^1.0.1
   flutter:
     sdk: flutter
 

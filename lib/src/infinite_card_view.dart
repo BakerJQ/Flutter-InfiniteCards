@@ -39,7 +39,7 @@ class _InfiniteCardsState extends State<InfiniteCards>
         });
     _helper.init(this, context);
     if (widget.controller != null) {
-      widget.controller.setAnimHelper(_helper);
+      widget.controller.animHelper = _helper;
     }
   }
 

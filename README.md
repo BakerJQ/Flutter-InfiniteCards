@@ -24,7 +24,7 @@ flutter run
 ### Add dependencies
 ```yaml
 dependencies:
-  infinite_cards: ^1.0.0
+  infinite_cards: ^1.0.1
 ```
 
 ### Build controller in initState
