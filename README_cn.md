@@ -20,6 +20,12 @@ flutter run
 
 ## 如何使用
 
+### 添加依赖
+```yaml
+dependencies:
+  infinite_cards: ^1.0.0
+```
+
 ### 构建Controller
 ```dart
 @override

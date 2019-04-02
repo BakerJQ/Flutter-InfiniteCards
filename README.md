@@ -20,6 +20,13 @@ flutter run
 ```
 
 ## How to use
+
+### Add dependencies
+```yaml
+dependencies:
+  infinite_cards: ^1.0.0
+```
+
 ### Build controller in initState
 ```dart
 @override
