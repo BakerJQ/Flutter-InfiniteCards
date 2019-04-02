@@ -60,7 +60,7 @@ If you just use all default animations, just do nothing.
 
 #### Customisation
 ```dart
-InfiniteCards(
+InfiniteCardsController(
             ...
             transformToFront: yourCustomTransformToFront,
             transformToBack: yourCustomTransformToBack,

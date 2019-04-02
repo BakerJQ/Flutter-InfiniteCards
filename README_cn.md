@@ -59,7 +59,7 @@ InfiniteCards(
 
 #### 自定义
 ```dart
-InfiniteCards(
+InfiniteCardsController(
             ...
             transformToFront: yourCustomTransformToFront,
             transformToBack: yourCustomTransformToBack,
