@@ -3,7 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'anim_helper.dart';
 import 'infinite_cards_controller.dart';
 
-enum AnimType { TO_FRONT, SWITCH, TO_END }
+//Three types of animation
+enum AnimType {
+  TO_FRONT,//custom animation for chosen card, common animation for other cards
+  SWITCH,//witch the position by custom animation of the first card and the chosen card
+  TO_END,//moving the first card to last position by custom animation, common animation for others
+}
 
 class InfiniteCards extends StatefulWidget {
   final double width, height;
