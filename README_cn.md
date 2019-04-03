@@ -11,7 +11,7 @@ https://github.com/BakerJQ/Android-InfiniteCards
 ## 截图
 | Android | iOS |
 | :------: | :------: |
-| ![](https://user-gold-cdn.xitu.io/2019/4/3/169dec980efdb293?w=284&h=480&f=gif&s=4948098) | ![](https://user-gold-cdn.xitu.io/2019/4/3/169decbf1767334a?w=220&h=480&f=gif&s=4126393) |
+| ![](https://raw.githubusercontent.com/BakerJQ/Flutter-InfiniteCards/master/screenshot/android.gif) | ![](https://raw.githubusercontent.com/BakerJQ/Flutter-InfiniteCards/master/screenshot/ios.gif) |
 
 ## 示例运行
 ```
