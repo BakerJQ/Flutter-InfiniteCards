@@ -10,4 +10,12 @@ class CardItem {
 
   @override
   int get hashCode => adapterIndex;
+
+  @override
+  bool operator ==(other) {
+    if (!(other is CardItem)) {
+      return false;
+    }
+    return other.adapterIndex == adapterIndex;
+  }
 }

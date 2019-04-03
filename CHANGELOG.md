@@ -5,3 +5,7 @@
 ## [1.0.2]
 
 - change "interpolator" to "curve"
+
+## [1.0.3]
+
+- add example

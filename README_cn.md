@@ -1,6 +1,8 @@
 # InfiniteCards
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
+[![pub package](https://img.shields.io/pub/v/infinite_cards.svg)](https://pub.dartlang.org/packages/infinite_cards)
+
 可自定义动效的卡片切换视图
 
 ## Android版本
@@ -23,7 +25,7 @@ flutter run
 ### 添加依赖
 ```yaml
 dependencies:
-  infinite_cards: ^1.0.2
+  infinite_cards: ^1.0.3
 ```
 
 ### 构建Controller
