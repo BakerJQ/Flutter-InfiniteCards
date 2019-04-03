@@ -40,6 +40,10 @@ dependencies:
     );
   }
 ```
+- animType : 动效展示类型
+  - TO_FRONT : 将点击的卡片切换到第一个
+  - SWITCH : 将点击的卡片和第一张卡片互换位置
+  - TO_END : 将第一张卡片移到最后，后面的卡片往前移动一个
 
 ### 构建Widget
 ```dart
