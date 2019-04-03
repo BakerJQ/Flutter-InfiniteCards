@@ -69,6 +69,31 @@ InfiniteCardsController(
             ...
           )
 ```
+实现Transform
+```dart
+Transform _defaultCommonTransform(Widget item, 
+    double fraction, double curveFraction, double cardHeight, double cardWidth, int fromPosition, int toPosition) 
+  //需要跨越的卡片数量{
+  int positionCount = fromPosition - toPosition;
+  //以0.8做为第一张的缩放尺寸，每向后一张缩小0.1
+  //(0.8 - 0.1 * fromPosition) = 当前位置的缩放尺寸
+  //(0.1 * fraction * positionCount) = 移动过程中需要改变的缩放尺寸 
+  double scale = (0.8 - 0.1 * fromPosition) + (0.1 * fraction * positionCount);
+  //在Y方向的偏移量，每向后一张，向上偏移卡片宽度的0.02
+  //-cardHeight * (0.8 - scale) * 0.5 对卡片做整体居中处理
+  double translationY = -cardHeight * (0.8 - scale) * 0.5 -
+      cardHeight * (0.02 * fromPosition - 0.02 * fraction * positionCount);
+  //返回缩放后，进行Y方向偏移的Widget
+  return Transform.translate(
+    offset: Offset(0, translationY),
+    child: Transform.scale(
+      scale: scale,
+      child: item,
+    ),
+  );
+}
+```
+
 ## *License*
 InfiniteCards is released under the Apache 2.0 license.
 
