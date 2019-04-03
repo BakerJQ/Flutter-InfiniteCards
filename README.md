@@ -68,7 +68,7 @@ InfiniteCardsController(
             ...
           )
 ```
-Implement Transform
+One example of implement Transform
 ```dart
 Transform _defaultCommonTransform(Widget item, 
     double fraction, double curveFraction, double cardHeight, double cardWidth, int fromPosition, int toPosition) 
