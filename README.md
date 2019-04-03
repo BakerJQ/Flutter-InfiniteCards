@@ -42,6 +42,11 @@ dependencies:
   }
 ```
 
+- animType : animation type
+  - TO_FRONT : move the selected card to first
+  - SWITCH : move the selected card to first, and the first card to the selected position
+  - TO_END : move the first card to last position
+
 ### Build widget with controller
 ```dart
 InfiniteCards(
@@ -69,6 +74,31 @@ InfiniteCardsController(
             curve: yourCustomCurve
             ...
           )
+```
+One example of implement Transform
+```dart
+Transform _defaultCommonTransform(Widget item, 
+    double fraction, double curveFraction, double cardHeight, double cardWidth, int fromPosition, int toPosition) 
+  {
+  //Count of card which needs to move over
+  int positionCount = fromPosition - toPosition;
+  //0.8 scale for the first card, and -0.1 per card behind
+  //(0.8 - 0.1 * fromPosition) = current specific card scale
+  //(0.1 * fraction * positionCount) = scale while moving
+  double scale = (0.8 - 0.1 * fromPosition) + (0.1 * fraction * positionCount);
+  //translate -0.02 * cardHeight per card behind
+  //-cardHeight * (0.8 - scale) * 0.5 to center the card
+  double translationY = -cardHeight * (0.8 - scale) * 0.5 -
+      cardHeight * (0.02 * fromPosition - 0.02 * fraction * positionCount);
+  //return the Widget after scale and translate
+  return Transform.translate(
+    offset: Offset(0, translationY),
+    child: Transform.scale(
+      scale: scale,
+      child: item,
+    ),
+  );
+}
 ```
 ## *License*
 InfiniteCards is released under the Apache 2.0 license.
