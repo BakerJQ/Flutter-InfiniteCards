@@ -40,6 +40,11 @@ dependencies:
   }
 ```
 
+- animType : animation type
+  - TO_FRONT : move the selected card to first
+  - SWITCH : move the selected card to first, and the first card to the selected position
+  - TO_END : move the first card to last position
+
 ### Build widget with controller
 ```dart
 InfiniteCards(
