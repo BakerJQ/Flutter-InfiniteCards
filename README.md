@@ -8,6 +8,9 @@ An infinite card switching UI for Flutter, support custom animation
 ## Android version
 https://github.com/BakerJQ/Android-InfiniteCards
 
+## Web version
+https://github.com/BakerJQ/Flutter-InfiniteCards/tree/web
+
 ## Screenshot
 | Android | iOS |
 | :------: | :------: |
