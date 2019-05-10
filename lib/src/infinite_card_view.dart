@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter_web/widgets.dart';
 
 import 'anim_helper.dart';
 import 'infinite_cards_controller.dart';

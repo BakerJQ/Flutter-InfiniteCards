@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter_web/material.dart';
 import 'package:infinite_cards/infinite_cards.dart';
 
 class Home extends StatefulWidget {
@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
 
   Widget _renderItem(BuildContext context, int index) {
     return Image(
-      image: AssetImage('assets/pic${index + 1}.png'),
+      image: AssetImage('pic${index + 1}.png'),
     );
   }
 
@@ -47,6 +47,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height / 2;
+    double width = height / 1.3;
     return Scaffold(
       appBar: AppBar(
         title: Text("InfiniteCards"),
@@ -54,8 +56,8 @@ class _HomeState extends State<Home> {
       body: Column(
         children: <Widget>[
           InfiniteCards(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width * 1.3,
+            width: width,
+            height: height,
             controller: _controller,
           ),
           Row(
