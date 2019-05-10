@@ -9,6 +9,9 @@
 ## Android版本
 https://github.com/BakerJQ/Android-InfiniteCards
 
+## Web版本
+https://github.com/BakerJQ/Flutter-InfiniteCards/tree/web
+
 ## 截图
 | Android | iOS |
 | :------: | :------: |
