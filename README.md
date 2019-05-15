@@ -3,15 +3,7 @@
 [![pub package](https://img.shields.io/pub/v/infinite_cards.svg)](https://pub.dartlang.org/packages/infinite_cards)
 
 An infinite card switching UI for Flutter, support custom animation
-可自定义动效的卡片切换视图（[中文文档](https://github.com/BakerJQ/Flutter-InfiniteCards/blob/master/README_cn.md)）
-
-## Android version
-https://github.com/BakerJQ/Android-InfiniteCards
-
-## Screenshot
-| Android | iOS |
-| :------: | :------: |
-| ![](https://raw.githubusercontent.com/BakerJQ/Flutter-InfiniteCards/master/screenshot/android.gif) | ![](https://raw.githubusercontent.com/BakerJQ/Flutter-InfiniteCards/master/screenshot/ios.gif) |
+可自定义动效的卡片切换视图（[中文文档](https://github.com/BakerJQ/Flutter-InfiniteCards/blob/web/README_cn.md)）
 
 ## Example
 First follow the instruction in https://github.com/flutter/flutter_web
